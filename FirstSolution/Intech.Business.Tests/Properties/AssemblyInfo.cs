@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // Les informations générales relatives à un assembly dépendent de 
 // l'ensemble d'attributs suivant. Changez les valeurs de ces attributs pour modifier les informations
 // associées à un assembly.
-[assembly: AssemblyTitle("Intech.Business")]
+[assembly: AssemblyTitle("Intech.Business.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Intech.Business")]
+[assembly: AssemblyProduct("Intech.Business.Tests")]
 [assembly: AssemblyCopyright("Copyright ©  2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // Le GUID suivant est pour l'ID de la typelib si ce projet est exposé à COM
-[assembly: Guid("172eca4f-28c5-4d1d-ac94-37b528f2f540")]
+[assembly: Guid("154676e7-50ac-4c39-a15b-0e4b847a13f7")]
 
 // Les informations de version pour un assembly se composent des quatre valeurs suivantes :
 //
