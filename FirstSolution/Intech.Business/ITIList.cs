@@ -33,6 +33,23 @@ namespace Intech.Business
             _array[_count++] = value;
         }
 
+        public void InsertAt(int i, T value)
+        {
+            /// Check if index is valable
+            if (i > _count || i < 0)
+            {
+                throw new IndexOutOfRangeException();
+            }
+            Array.Copy(_array, i, _array, i + 1, _array.Length - (i+1));
+            _array[i] = value;
+            ++_count;
+        }
+
+        public int IndexOf(T value)
+        {
+            return Array.IndexOf(_array, value);
+        }
+
         public T this[int i]
         {
             get 
