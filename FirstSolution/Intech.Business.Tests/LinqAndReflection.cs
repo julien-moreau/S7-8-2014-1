@@ -53,7 +53,7 @@ namespace Intech.Business.Tests
             // => SelectMany "concatenates" the intermediate set of Methods.
             // Version with an anonymous function:
             IEnumerable<MethodInfo> allmethods = me.GetTypes()
-                                                    .SelectMany( delegate( Type t ) { return t.GetMethods() } );
+                                                    .SelectMany( delegate( Type t ) { return t.GetMethods(); } );
             // Cleaner with a lambda function.
             allmethods = me.GetTypes()
                            .SelectMany( t => t.GetMethods() );
