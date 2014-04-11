@@ -29,7 +29,6 @@ namespace Intech.Business.Tests
             FileAssert.AreEqual( path, pathTarget );
         }
 
-
         [Test]
         public void CompressionDecompression()
         {
@@ -37,6 +36,7 @@ namespace Intech.Business.Tests
             string pathCompressed = path + ".gzip";
             string pathTarget = path + ".copy";
             // path ==> pathCompressed
+            // path <- fIn -->X--> fZip -> fOut -> pathCompressed
             using( var fIn = new FileStream( path, FileMode.Open, FileAccess.Read, FileShare.None ) )
             using( var fOut = new FileStream( pathCompressed, FileMode.Create, FileAccess.Write, FileShare.None ) )
             using( var fZip = new GZipStream( fOut, CompressionMode.Compress ) )
@@ -45,8 +45,13 @@ namespace Intech.Business.Tests
             }
             Assert.That( new FileInfo( path ).Length > new FileInfo( pathCompressed ).Length );
             // pathCompressed ==> pathTarget
-            // ??
-            
+            // pathCompressed -> fIn -> fZip -->X--> fOut -> pathTarget
+            using( var fIn = new FileStream( pathCompressed, FileMode.Open, FileAccess.Read, FileShare.None ) )
+            using( var fZip = new GZipStream( fIn, CompressionMode.Decompress ) )
+            using( var fOut = new FileStream( pathTarget, FileMode.Create, FileAccess.Write, FileShare.None ) )
+            {
+                Transfer( fZip, fOut );
+            }            
             FileAssert.AreEqual( path, pathTarget );
         }
 

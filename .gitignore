@@ -108,3 +108,4 @@ Backup*/
 UpgradeLog*.XML
 FirstSolution/Intech.Business.Tests/TestSupport/TestFile.gzip
 FirstSolution/Intech.Business.Tests/TestSupport/TestFile.bin.copy
+FirstSolution/Intech.Business.Tests/TestSupport/TestFile.bin.gzip
