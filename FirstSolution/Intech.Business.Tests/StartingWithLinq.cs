@@ -53,7 +53,7 @@ namespace Intech.Business.Tests
         [Test]
         public void MiniLinqInAction()
         {
-            var evenRandomNumbers = RandomNumbers( 125 ).Where( x => x % 2 == 0 );
+            var evenRandomNumbers = RandomNumbers( 125 ).Where( x => (x&1) == 0 );
             var simpler = RandomNumbers( 125 ).Select( x => x * 2.0 );
             var toString = RandomNumbers( 125 ).Select( x => x.ToString() );
 
