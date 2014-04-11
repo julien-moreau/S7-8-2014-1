@@ -48,8 +48,7 @@ namespace Intech.Business.Tests
         public void AllTheMethodsWeHaveImplemented()
         {
             Assembly me = Assembly.GetExecutingAssembly();
-            
-            /*
+
             // Getting all the methods for all the Types 
             // => SelectMany "concatenates" the intermediate set of Methods.
             // Version with an anonymous function:
@@ -72,8 +71,13 @@ namespace Intech.Business.Tests
             {
                 Console.WriteLine( m.Name );
             }
-            */
+        }
 
+        [Test]
+        public void AllTheMethodsWeHaveImplementedInOneLine()
+        {
+            Assembly me = Assembly.GetExecutingAssembly();
+            
             // How to make a "one-liner"?
             me.GetTypes()
                 .SelectMany( t => t.GetMethods() )
