@@ -55,6 +55,7 @@ namespace Intech.Business.Tests
         public void RemovingDiacriticsTests()
         {
             Assert.That( RemoveDiacritics( "" ), Is.EqualTo( "" ) );
+
             Assert.That( RemoveDiacritics( "Eléonore" ), Is.EqualTo( "Eleonore" ) );
 
             Assert.That( RemoveDiacritics( "éö¨nèôîâä" ), Is.EqualTo( "eo¨neoiaa" ) );
