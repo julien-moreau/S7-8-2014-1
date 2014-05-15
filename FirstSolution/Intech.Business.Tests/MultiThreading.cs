@@ -174,6 +174,13 @@ namespace Intech.Business.Tests
         readonly object _lockB = new object();
 
         [Test]
+        public void DeadLockWithTreadPool()
+        {
+            ThreadPool.QueueUserWorkItem( unused => LockAThenB() );
+            ThreadPool.QueueUserWorkItem( _ => LockBThenA() );
+        }
+
+        [Test]
         public void DeadLockDemo()
         {
             Thread t1 = new Thread( LockAThenB );

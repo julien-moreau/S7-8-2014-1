@@ -15,7 +15,8 @@ namespace Intech.Business.Tests
         [Test]
         public void Connection()
         {
-            SqlConnection c = new SqlConnection( "Server=.;Integrated Security=true;" );
+           string cn = @"Data Source=(LocalDB)\v11.0;AttachDbFilename=E:\Intech\2014-1\S7-8\S7-8-2014-1\FirstSolution\Intech.Business.Tests\Test.mdf;Integrated Security=True";
+            SqlConnection c = new SqlConnection( cn );
             c.InfoMessage += ( o, e ) => Console.WriteLine( e.Message );
             c.Open();
             try
