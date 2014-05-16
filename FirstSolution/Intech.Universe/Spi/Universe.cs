@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Intech.Space.Spi
 {
-    public class Star
+    [Serializable]
+    public class Star : ISerializable
     {
         readonly Galaxy _galaxy;
         string _name;
@@ -32,19 +34,43 @@ namespace Intech.Space.Spi
             }
         }
 
+        public bool IsDestroyed { get { return _name == null; } }
+
         public void Destroy()
         {
             if( _name != null )
             {
                 _name = null;
-                _galaxy.OnDetroy( this );
+                _galaxy.OnDestroy( this );
             }
         }
 
         public Galaxy Galaxy { get { return _name != null ? _galaxy : null; } }
 
+
+        protected Star( SerializationInfo info, StreamingContext context )
+        {
+            int v = info.GetInt32( "version" );
+            if( v == 0 )
+            {
+                _name = info.GetString( "n" );
+                _galaxy = (Galaxy)info.GetValue( "g", typeof( Galaxy ) );
+            }
+            else 
+            { 
+                //... 
+            }
+        }
+
+        void ISerializable.GetObjectData( SerializationInfo info, StreamingContext context )
+        {
+            info.AddValue( "version", 0 );
+            info.AddValue( "n", _name );
+            info.AddValue( "g", _galaxy );
+        }
     }
 
+    [Serializable]
     public class Galaxy
     {
         readonly Universe _universe;
@@ -84,13 +110,14 @@ namespace Intech.Space.Spi
             return s;
         }
 
-        internal void OnDetroy( Star star )
+        internal void OnDestroy( Star star )
         {
             Debug.Assert( _stars.Contains( star ) );
             _stars.Remove( star );
         }
     }
 
+    [Serializable]
     public class Universe
     {
         readonly Dictionary<string,Galaxy> _galaxies;

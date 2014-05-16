@@ -75,12 +75,17 @@
     <Compile Include="StreamManipulation.cs" />
     <Compile Include="TaskExperimentation.cs" />
     <Compile Include="TestHelper.cs" />
+    <Compile Include="Universe\Serializations.cs" />
     <Compile Include="WhatIsEquality.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Intech.Business\Intech.Business.csproj">
       <Project>{05ae8486-1969-4e3a-8f59-769f4b6349c5}</Project>
       <Name>Intech.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Intech.Universe\Intech.Universe.csproj">
+      <Project>{497ff6ad-bdb4-4220-8c2e-f0c4779caa5f}</Project>
+      <Name>Intech.Universe</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
