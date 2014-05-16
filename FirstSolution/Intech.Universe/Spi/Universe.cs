@@ -154,6 +154,16 @@ namespace Intech.Space.Spi
 
         #endregion
 
+        internal Galaxy( Universe u, XElement e )
+        {
+            _universe = u;
+            _name = e.Attribute( "Name" ).Value;
+            _stars = e.Elements("Stars")
+                        .Elements("Star")
+                        .Select( es => new Star( this, es.Attribute("Name").Value ))
+                        .ToList();
+        }
+
         internal XElement ToXml()
         {
             return new XElement( "Galaxy",
@@ -181,6 +191,11 @@ namespace Intech.Space.Spi
         public Universe( XElement e )
             : this()
         {
+            int v = Int32.Parse( e.Attribute( "Version" ).Value );
+            _galaxies = e.Elements( "Galaxies" )
+                            .Elements( "Galaxy" )
+                            .Select( eg => new Galaxy( this, eg ) )
+                            .ToDictionary( g => g.Name );
         }
 
         public XElement ToXml()
