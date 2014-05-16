@@ -74,6 +74,8 @@ namespace Intech.Space.Spi
             }
         }
 
+        public IReadOnlyList<Star> Stars { get { return _stars; } }
+
         public Star CreateStar( string name )
         {
             if( String.IsNullOrWhiteSpace( name ) ) throw new ArgumentException();
