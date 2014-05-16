@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Intech.Space.Spi
 {
@@ -62,11 +64,23 @@ namespace Intech.Space.Spi
             }
         }
 
+        public Star( Galaxy galaxy, BinaryReader r )
+        {
+            _galaxy = galaxy;
+            _name = r.ReadString();
+        }
+
         void ISerializable.GetObjectData( SerializationInfo info, StreamingContext context )
         {
             info.AddValue( "version", 0 );
             info.AddValue( "n", _name );
             info.AddValue( "g", _galaxy );
+        }
+
+        internal void Serialize( BinaryWriter w )
+        {
+            Debug.Assert( _name != null );
+            w.Write( _name );
         }
     }
 
@@ -115,6 +129,41 @@ namespace Intech.Space.Spi
             Debug.Assert( _stars.Contains( star ) );
             _stars.Remove( star );
         }
+
+        #region Serialization
+
+        internal Galaxy( Universe u, BinaryReader r )
+        {
+            _universe = u;
+            _name = r.ReadString();
+            int nbStar = r.ReadInt32();
+            _stars = new List<Star>( nbStar );
+            while( --nbStar >= 0 )
+            {
+                _stars.Add( new Star( this, r ) );
+            }
+
+        }
+
+        internal void Serialize( BinaryWriter w )
+        {
+            w.Write( _name );
+            w.Write( _stars.Count );
+            foreach( var s in _stars ) s.Serialize( w );
+        }
+
+        #endregion
+
+        internal XElement ToXml()
+        {
+            return new XElement( "Galaxy",
+                        new XAttribute( "Name", _name ),
+                        new XAttribute( "StarCount", _stars.Count ),
+                        new XElement( "Stars",
+                            _stars.Select( s => new XElement( "Star",
+                                                    new XAttribute( "Name", s.Name ) ) )
+                        ));
+        }
     }
 
     [Serializable]
@@ -126,6 +175,64 @@ namespace Intech.Space.Spi
         {
             _galaxies = new Dictionary<string, Galaxy>();
         }
+
+        #region Xml 
+
+        public Universe( XElement e )
+            : this()
+        {
+        }
+
+        public XElement ToXml()
+        {
+            return new XElement( "Universe",
+                                 new XAttribute( "Version", 0 ),
+                                 new XAttribute( "CreationDate", DateTime.UtcNow ),
+                                 new XElement( "Galaxies",
+                                        _galaxies.Values.Select( g => g.ToXml() )
+                                     ) );
+        }
+
+
+        #endregion 
+
+        #region Serialization
+
+        public Universe( BinaryReader r )
+            : this()
+        {
+            if( r.ReadString() != "Intech-Spi-Universe" )
+            {
+                throw new InvalidDataException( "This is not a valid stream for a Universe" );
+            }
+            int v = r.ReadInt32();
+            while( r.ReadBoolean() )
+            {
+                var g = new Galaxy( this, r );
+                _galaxies.Add( g.Name, g );
+            }
+        }
+
+        public void HomeMadeSerialize( Stream s )
+        {
+            HomeMadeSerialize( new BinaryWriter( s ) );
+        }
+
+        public void HomeMadeSerialize( BinaryWriter w )
+        {
+            w.Write( "Intech-Spi-Universe" );
+            // Version!
+            w.Write( 0 );
+            foreach( var g in _galaxies.Values )
+            {
+                w.Write( true );
+                g.Serialize( w );
+            }
+            w.Write( false );
+        }
+
+        #endregion
+
 
         class DictionaryValuesWrapper<TValue> : IReadOnlyCollection<TValue>
         {

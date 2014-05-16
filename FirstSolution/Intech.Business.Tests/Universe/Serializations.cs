@@ -16,13 +16,7 @@ namespace Intech.Business.Tests.UniverseTests
         [Test]
         public void SimpleOne()
         {
-            Universe u = new Universe();
-            var g1 = u.FindOrCreateGalaxy( "Andromède" );
-            var g2 = u.FindOrCreateGalaxy( "Cassiopée" );
-            g1.CreateStar( "S1" );
-            g1.CreateStar( "S2" );
-            g1.CreateStar( "S3" );
-            g2.CreateStar( "s4" );
+            Universe u = CreateTestUniverse();
 
             using( MemoryStream m = new MemoryStream() )
             { 
@@ -40,6 +34,47 @@ namespace Intech.Business.Tests.UniverseTests
             {
                 new BinaryFormatter().Serialize( f, u );
             }
+
+        }
+
+        private static Universe CreateTestUniverse()
+        {
+            Universe u = new Universe();
+            var g1 = u.FindOrCreateGalaxy( "Andromède" );
+            var g2 = u.FindOrCreateGalaxy( "Cassiopée" );
+            g1.CreateStar( "S1" );
+            g1.CreateStar( "S2" );
+            g1.CreateStar( "S3" );
+            g2.CreateStar( "s4" );
+            return u;
+        }
+
+        [Test]
+        public void HomeMade()
+        {
+            Universe u = CreateTestUniverse();
+
+            string fName = Path.Combine( TestHelper.TestSupportFolder.FullName, "Universe.HomeMade.dat" );
+            using( FileStream f = File.OpenWrite( fName ) )
+            {
+                u.HomeMadeSerialize( f );
+            }
+
+        }
+
+
+        [Test]
+        public void XmlHomeMadeExternalization()
+        {
+            Universe u = CreateTestUniverse();
+
+            Console.WriteLine( u.ToXml() );
+
+            //string fName = Path.Combine( TestHelper.TestSupportFolder.FullName, "Universe.HomeMade.dat" );
+            //using( FileStream f = File.OpenWrite( fName ) )
+            //{
+            //    u.HomeMadeSerialize( f );
+            //}
 
         }
     }
