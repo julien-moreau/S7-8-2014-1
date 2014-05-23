@@ -44,6 +44,10 @@
     <Compile Include="FileProcessorWithFieldMethodInjection.cs" />
     <Compile Include="FileProcessorWithFieldCtorInjection.cs" />
     <Compile Include="IConsoleOutput.cs" />
+    <Compile Include="MicroDI\DIContainer.cs" />
+    <Compile Include="MicroDI\IDependencyResolver.cs" />
+    <Compile Include="RealWebClient.cs" />
+    <Compile Include="IWebClient.cs" />
     <Compile Include="IFileSystemProvider.cs" />
     <Compile Include="ITIDictionary.cs" />
     <Compile Include="ITIList.cs" />

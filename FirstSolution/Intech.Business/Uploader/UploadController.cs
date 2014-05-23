@@ -10,11 +10,16 @@ namespace Intech.Business
     {
         readonly IFileSystemProvider _fileProvider;
         readonly IConsoleOutput _console;
+        readonly IWebClient _webClient;
 
-        public UploadController( IFileSystemProvider fileProvider, IConsoleOutput output )
+        public UploadController( IFileSystemProvider fileProvider, IWebClient webClient, IConsoleOutput output )
         {
+            if( fileProvider == null ) throw new ArgumentNullException( "fileProvider" );
+            if( webClient == null ) throw new ArgumentNullException( "webClient" );
+            if( output == null ) throw new ArgumentNullException( "output" );
             _fileProvider = fileProvider;
             _console = output;
+            _webClient = webClient;
         }
 
         public void UpLoad( string localUrlPath, string targetUrl )
@@ -28,10 +33,7 @@ namespace Intech.Business
                 {
                     if( !isHidden )
                     {
-                        using( var c = new System.Net.WebClient() )
-                        {
-                            c.UploadFile( targetUrl, p );
-                        }
+                        _webClient.UploadFile( p, targetUrl );
                     }
                 }
             );
