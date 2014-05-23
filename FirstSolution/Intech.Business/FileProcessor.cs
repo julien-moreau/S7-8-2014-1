@@ -65,7 +65,7 @@ namespace Intech.Business
                     #endregion
                     
                     if( isHidden ) Console.WriteLine( "Processing hidden file '{0}'.", file.FullName );
-                    else Console.WriteLine( "Processing hidden file '{0]'.", file.FullName );
+                    else Console.WriteLine( "Processing file '{0]'.", file.FullName );
                 }
             }
             finally
