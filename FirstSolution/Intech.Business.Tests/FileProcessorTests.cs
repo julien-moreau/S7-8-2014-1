@@ -15,7 +15,7 @@ namespace Intech.Business.Tests
         public void EdgeCaseNoRootPath()
         {
             // Arrange
-            FileProcessor p = new FileProcessor();
+            FileProcessorWithFieldCtorInjection p = new FileProcessorWithFieldCtorInjection();
             // Act
             var r = p.Process( "Nimp" );
             // Assert
@@ -28,7 +28,7 @@ namespace Intech.Business.Tests
         public void EdgeCaseEmptyRoot()
         {
             // Arrange
-            FileProcessor p = new FileProcessor();
+            FileProcessorWithFieldCtorInjection p = new FileProcessorWithFieldCtorInjection();
             var emptyFolder = Path.Combine( TestHelper.TestSupportPath, "EmptyFolder" );
             Directory.CreateDirectory( emptyFolder );
             // Act

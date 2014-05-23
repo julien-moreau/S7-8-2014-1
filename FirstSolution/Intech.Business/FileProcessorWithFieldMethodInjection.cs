@@ -6,9 +6,20 @@ using System.Threading.Tasks;
 
 namespace Intech.Business
 {
-    public class FileProcessor
+    public class FileProcessorWithFieldMethodInjection
     {
         IConsoleOutput _console;
+
+        public FileProcessorWithFieldMethodInjection()
+        {
+            _console = EmptyConsole.Instance;
+        }
+            
+        public void Initialize( IConsoleOutput c )
+        {
+            if( c == null ) throw new ArgumentNullException( "c" );
+            _console = c;
+        }
 
         public FileProcessorResult Process( string path )
         {

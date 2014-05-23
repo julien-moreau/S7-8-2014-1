@@ -40,7 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileProcessorParameterInjection.cs" />
-    <Compile Include="FileProcessor.cs" />
+    <Compile Include="FileProcessorWithFieldPropertyInjection.cs" />
+    <Compile Include="FileProcessorWithFieldMethodInjection.cs" />
+    <Compile Include="FileProcessorWithFieldCtorInjection.cs" />
     <Compile Include="IConsoleOutput.cs" />
     <Compile Include="ITIDictionary.cs" />
     <Compile Include="ITIList.cs" />
@@ -51,6 +53,7 @@
     <Compile Include="StringConsole.cs" />
     <Compile Include="RealConsole.cs" />
     <Compile Include="TeeStream.cs" />
+    <Compile Include="Uploader.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
