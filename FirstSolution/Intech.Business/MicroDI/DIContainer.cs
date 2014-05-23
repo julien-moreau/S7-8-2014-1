@@ -9,21 +9,38 @@ namespace Intech.Business.MicroDI
 {
     public class DIContainer : IDependencyResolver
     {
-        readonly Dictionary<Type,Type> _mappedTypes;
+        class Entry
+        {
+            public Entry( Type mappedType )
+            {
+                MappedType = mappedType;
+            }
+
+            public readonly Type MappedType;
+            public object Singleton;
+        }
+
+        readonly Dictionary<Type,Entry> _mappedTypes;
 
         public DIContainer()
         {
-            _mappedTypes = new Dictionary<Type, Type>();
+            _mappedTypes = new Dictionary<Type, Entry>();
         }
 
         public object Resolve( Type t )
         {
-            Type mapped = MapType( t );
-            Debug.Assert( mapped != null && !mapped.IsAbstract && !mapped.IsInterface );
-            return ObtainInstance( mapped );
+            Entry e = MapType( t );
+            Debug.Assert( e != null && !e.MappedType.IsAbstract && !e.MappedType.IsInterface );
+            return ObtainInstance( e );
         }
 
-        private object ObtainInstance( Type mapped )
+        private object ObtainInstance( Entry e )
+        {
+            if( e.Singleton != null ) return e.Singleton;
+            return CreateInstance( e.MappedType );
+        }
+
+        private object CreateInstance( Type mapped )
         {
             var availableCtors = mapped.GetConstructors()
                 .Select( c => new { Ctor = c, Parameters = c.GetParameters() } )
@@ -41,13 +58,32 @@ namespace Intech.Business.MicroDI
 
         public void Register( Type abstraction, Type implementation )
         {
-            _mappedTypes.Add( abstraction, implementation );
+            Entry e;
+            if( !_mappedTypes.TryGetValue( implementation, out e ))
+            {
+                e = new Entry( implementation );
+                _mappedTypes.Add( implementation, e );
+            }
+            if( abstraction != implementation ) _mappedTypes.Add( abstraction, e );
         }
 
-        private Type MapType( Type t )
+        public void Register( object singleton )
         {
-            if( t.IsInterface || t.IsAbstract )  return _mappedTypes[t];
-            return t;
+            Type t = singleton.GetType();
+            Register( t, t );
+            _mappedTypes[t].Singleton = singleton;
+        }
+
+        private Entry MapType( Type t )
+        {
+            Entry e;
+            if( _mappedTypes.TryGetValue( t, out e ) ) return e;
+            
+            if( t.IsInterface || t.IsAbstract ) throw new InvalidOperationException( "Unregistered abstraction." );
+            
+            e = new Entry( t );
+            _mappedTypes.Add( t, e );
+            return e;
         }
     }
 }
