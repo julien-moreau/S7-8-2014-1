@@ -8,6 +8,12 @@ namespace Intech.Business
 {
     public class EmptyConsole : IConsoleOutput
     {
+        public static readonly EmptyConsole Instance = new EmptyConsole();
+
+        private EmptyConsole()
+        {
+        }
+
         public void WriteLine( string message, params object[] parameters )
         {
         }

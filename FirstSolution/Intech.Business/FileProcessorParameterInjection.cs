@@ -6,24 +6,23 @@ using System.Threading.Tasks;
 
 namespace Intech.Business
 {
-    public class FileProcessor
+    public class FileProcessorParameterInjection
     {
-        IConsoleOutput _console;
-
-        public FileProcessorResult Process( string path )
+        public FileProcessorResult Process( string path, IConsoleOutput c = null )
         {
+            if( c == null ) c = EmptyConsole.Instance;
             var r = new FileProcessorResult( path );
             DirectoryInfo d = new DirectoryInfo( path );
             if( d.Exists )
             {
-                Process( d, r, false );
+                Process( c, d, r, false );
             }
             return r;
         }
 
-        void Process( DirectoryInfo d, FileProcessorResult r, bool isParentHidden )
+        void Process( IConsoleOutput c, DirectoryInfo d, FileProcessorResult r, bool isParentHidden )
         {
-            _console.WriteLine( "Processing directory '{0}'.", d.FullName );
+            c.WriteLine( "Processing directory '{0}'.", d.FullName );
             ++r.TotalDirectoryCount;
             bool thisDirectoryIsHidden = (d.Attributes & FileAttributes.Hidden) != 0;
             if( thisDirectoryIsHidden )
@@ -65,9 +64,9 @@ namespace Intech.Business
                         // to be based on a single byte.
                     }
                     #endregion
-
-                    if( isHidden ) _console.WriteLine( "Processing hidden file '{0}'.", file.FullName );
-                    else _console.WriteLine( "Processing file '{0]'.", file.FullName );
+                    
+                    if( isHidden ) c.WriteLine( "Processing hidden file '{0}'.", file.FullName );
+                    else c.WriteLine( "Processing file '{0]'.", file.FullName );
                 }
             }
             finally

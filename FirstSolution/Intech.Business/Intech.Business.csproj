@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileProcessorParameterInjection.cs" />
     <Compile Include="FileProcessor.cs" />
     <Compile Include="IConsoleOutput.cs" />
     <Compile Include="ITIDictionary.cs" />
