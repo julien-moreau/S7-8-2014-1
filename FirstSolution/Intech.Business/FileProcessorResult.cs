@@ -9,6 +9,9 @@ namespace Intech.Business
     {
         readonly string _rootPath;
         readonly DateTime _date;
+        List<Tuple<string,Exception>> _errors;
+
+        static readonly Tuple<string, Exception>[] _noErrors = new Tuple<string, Exception>[0];
 
         int _totalDirectoryCount;
 
@@ -16,6 +19,21 @@ namespace Intech.Business
         {
             _rootPath = rootPath;
             _date = DateTime.UtcNow;
+        }
+
+        internal void AddError( string fName, Exception ex )
+        {
+            if( _errors == null ) _errors = new List<Tuple<string, Exception>>();
+            _errors.Add( Tuple.Create( fName, ex ) );
+        }
+
+        public IReadOnlyList<Tuple<string, Exception>> Errors
+        {
+            get 
+            {
+                if( _errors != null ) return _errors;
+                return _noErrors; 
+            }
         }
 
         public string RootPath

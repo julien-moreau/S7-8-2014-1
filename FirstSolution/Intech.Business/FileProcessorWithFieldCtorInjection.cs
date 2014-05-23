@@ -9,11 +9,18 @@ namespace Intech.Business
     public class FileProcessorWithFieldCtorInjection
     {
         readonly IConsoleOutput _console;
+        bool _stopOnFirstError;
 
         public FileProcessorWithFieldCtorInjection( IConsoleOutput c )
         {
             if( c == null ) throw new ArgumentNullException( "c" );
             _console = c;
+        }
+
+        public bool StopOnFirstError
+        {
+            get { return _stopOnFirstError; }
+            set { _stopOnFirstError = value; }
         }
 
         public FileProcessorResult Process( string path, Action<bool,FileInfo> onFile = null)
@@ -89,7 +96,7 @@ namespace Intech.Business
                         }
                         while( (dump = dump.InnerException) != null );
 
-                        if( stopOnFirstError )
+                        if( _stopOnFirstError )
                         {
                             // Solution 1: just rethrow the orginal exception. 
                             // throw;
@@ -100,7 +107,7 @@ namespace Intech.Business
                         }
                         else
                         {
-                            ??
+                            r.AddError( file.FullName, ex );
                         }
                     }
                 }

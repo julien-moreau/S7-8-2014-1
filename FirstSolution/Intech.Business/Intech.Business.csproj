@@ -44,6 +44,7 @@
     <Compile Include="FileProcessorWithFieldMethodInjection.cs" />
     <Compile Include="FileProcessorWithFieldCtorInjection.cs" />
     <Compile Include="IConsoleOutput.cs" />
+    <Compile Include="IFileSystemProvider.cs" />
     <Compile Include="ITIDictionary.cs" />
     <Compile Include="ITIList.cs" />
     <Compile Include="KrabouilleStream.cs" />
@@ -54,6 +55,7 @@
     <Compile Include="RealConsole.cs" />
     <Compile Include="TeeStream.cs" />
     <Compile Include="Uploader.cs" />
+    <Compile Include="Uploader\UploadController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
