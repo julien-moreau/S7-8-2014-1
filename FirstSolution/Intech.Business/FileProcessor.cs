@@ -21,6 +21,7 @@ namespace Intech.Business
 
         void Process( DirectoryInfo d, FileProcessorResult r, bool isParentHidden )
         {
+            Console.WriteLine( "Processing directory '{0}'.", d.FullName );
             ++r.TotalDirectoryCount;
             bool thisDirectoryIsHidden = (d.Attributes & FileAttributes.Hidden) != 0;
             if( thisDirectoryIsHidden )
@@ -62,7 +63,9 @@ namespace Intech.Business
                         // to be based on a single byte.
                     }
                     #endregion
-
+                    
+                    if( isHidden ) Console.WriteLine( "Processing hidden file '{0}'.", file.FullName );
+                    else Console.WriteLine( "Processing hidden file '{0]'.", file.FullName );
                 }
             }
             finally

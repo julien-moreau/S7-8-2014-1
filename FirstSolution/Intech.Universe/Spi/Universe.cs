@@ -10,18 +10,39 @@ using System.Xml.Linq;
 
 namespace Intech.Space.Spi
 {
+    public interface IUniverseTrait
+    {
+        XElement ToXml();
+        void Write( BinaryWriter w );
+    }
+
+        interface IUniverseTraitFactory
+        {
+            IUniverseTrait From( XElement e );
+            IUniverseTrait From( BinaryReader r );
+
+        }
+
+
     [Serializable]
     public class Star : ISerializable
     {
         readonly Galaxy _galaxy;
         string _name;
 
+        [NonSerialized]
+        readonly List<IUniverseTrait> _traits;
+
         internal Star( Galaxy g, string name )
         {
             Debug.Assert( name != null );
             _galaxy = g;
             _name = name;
+            _traits = new List<IUniverseTrait>();
         }
+
+
+        public IList<IUniverseTrait> Traits { get { return _traits; } }
 
         public string Name
         {
@@ -154,7 +175,7 @@ namespace Intech.Space.Spi
 
         #endregion
 
-        internal Galaxy( Universe u, XElement e )
+        internal Galaxy( Universe u, XElement e, IUniverseTraitFactory traitFactory = null )
         {
             _universe = u;
             _name = e.Attribute( "Name" ).Value;

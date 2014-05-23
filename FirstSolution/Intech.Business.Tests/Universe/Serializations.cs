@@ -5,6 +5,8 @@ using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 using Intech.Space.Spi;
 using NUnit.Framework;
 
@@ -66,16 +68,31 @@ namespace Intech.Business.Tests.UniverseTests
         [Test]
         public void XmlHomeMadeExternalization()
         {
-            Universe u = CreateTestUniverse();
-
-            Console.WriteLine( u.ToXml() );
-
-            //string fName = Path.Combine( TestHelper.TestSupportFolder.FullName, "Universe.HomeMade.dat" );
-            //using( FileStream f = File.OpenWrite( fName ) )
-            //{
-            //    u.HomeMadeSerialize( f );
-            //}
-
+            string fName = Path.Combine( TestHelper.TestSupportFolder.FullName, "Universe.xml" );
+            string xmlUOriginal;
+            string xmlUReloaded;
+            {
+                Universe u = CreateTestUniverse();
+                var xml = u.ToXml();
+                xmlUOriginal = xml.ToString();
+                var docXml = new XDocument( xml );
+                using( var writer = XmlWriter.Create( fName, new XmlWriterSettings()
+                {
+                    Indent = true,
+                    NewLineOnAttributes = true
+                } ) )
+                {
+                    docXml.WriteTo( writer );
+                }
+            }
+            {
+                var doc = XDocument.Load( XmlReader.Create( fName ) );
+                
+                var uLoaded = new Universe( doc.Root );
+                var uExportAgain = new Universe( uLoaded.ToXml() );
+                xmlUReloaded = uExportAgain.ToXml().ToString();
+            }
+            Assert.That( xmlUOriginal, Is.EqualTo( xmlUReloaded ) );
         }
     }
 }

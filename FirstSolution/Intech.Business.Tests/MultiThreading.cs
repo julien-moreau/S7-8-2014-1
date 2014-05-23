@@ -59,7 +59,7 @@ namespace Intech.Business.Tests
         int _iSuffer;
 
         [Test]
-        public void RaceCoditionDemo()
+        public void RaceConditionDemo()
         {
             StressTest( DoASimpleThing, shouldFail: true );
             StressTest( DoASimpleThingWithLock, shouldFail: false );
@@ -173,14 +173,24 @@ namespace Intech.Business.Tests
         readonly object _lockA = new object();
         readonly object _lockB = new object();
 
+        /// <summary>
+        /// This test blocks threads from the pool and prevents
+        /// NUnit runner to close.
+        /// This is why it is marked as Explicit: it runs only on demand. 
+        /// </summary>
         [Test]
+        [Explicit]
         public void DeadLockWithTreadPool()
         {
             ThreadPool.QueueUserWorkItem( unused => LockAThenB() );
             ThreadPool.QueueUserWorkItem( _ => LockBThenA() );
         }
 
+        /// <summary>
+        /// Same as above: this deadlocks the test thread.
+        /// </summary>
         [Test]
+        [Explicit]
         public void DeadLockDemo()
         {
             Thread t1 = new Thread( LockAThenB );
