@@ -11,7 +11,7 @@ namespace Intech.App
     {
         static void Main( string[] args )
         {
-            FileProcessorWithFieldCtorInjection p = new FileProcessorWithFieldCtorInjection();
+            FileProcessorWithFieldCtorInjection p = new FileProcessorWithFieldCtorInjection( new RealConsole() );
             var r = p.Process( "C:\\Temp" );
             Console.WriteLine( "TotalFileCount = {0}", r.TotalFileCount );
             Console.WriteLine( "TotalDirectoryCount = {0}", r.TotalDirectoryCount );

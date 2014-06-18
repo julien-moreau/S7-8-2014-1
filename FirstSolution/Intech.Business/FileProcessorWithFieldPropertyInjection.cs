@@ -87,10 +87,10 @@ namespace Intech.Business
             }
 
             // This code is the same as the previous one (try/finally/while...)
-            foreach( var subDir in d.EnumerateDirectories() )
-            {
-                Process( c, subDir, r, isParentHidden || thisDirectoryIsHidden );
-            }
+            //foreach( var subDir in d.EnumerateDirectories() )
+            //{
+            //    Process( subDir, r, isParentHidden || thisDirectoryIsHidden );
+            //}
 
         }
     }
